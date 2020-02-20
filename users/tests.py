@@ -31,7 +31,6 @@ def test__register_new_user_with_simple_password(client):
     resp = client.post(
         "/api/v1/user/", data=user_input, content_type="application/json"
     )
-    user_result = resp.json()
 
     assert resp.status_code == 400
 
