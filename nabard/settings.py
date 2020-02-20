@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -74,14 +76,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "nabard.wsgi.application"
 
+AUTH_USER_MODEL = "users.User"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "USER": get_env("DB_USER", "nabard"),
+        "PASSWORD": get_env("DB_PASS", "nabard"),
+        "HOST": get_env("DB_HOST", "localhost"),
+        "PORT": get_env("DB_PORT", "5432"),
+        "NAME": get_env("DB_NAME", "nabard"),
+        "TEST": {"NAME": "test"},
     }
 }
 
@@ -118,3 +126,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = None if DEBUG else os.path.join(BASE_DIR, "static")
+
+# API
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_VERSION": 1.0,
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.CursorPagination",
+    "PAGE_SIZE": 20,
+}

@@ -14,8 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.documentation import include_docs_urls
+
+
+v1_urls = ([path("user/", include("users.urls"))], "v1")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("api/docs/", include_docs_urls(title="Nabard APIs")),
+    path("api/v1/", include(v1_urls, namespace="v1")),
 ]
