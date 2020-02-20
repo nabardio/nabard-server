@@ -4,6 +4,8 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "*"
+pylama = "*"
 
 [packages]
 django = "*"
@@ -11,3 +13,6 @@ djangorestframework = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
