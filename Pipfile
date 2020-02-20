@@ -6,6 +6,9 @@ verify_ssl = true
 [dev-packages]
 black = "*"
 pylama = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-django = "*"
 
 [packages]
 django = "*"
