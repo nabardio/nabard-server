@@ -16,7 +16,6 @@ install:
   - pipenv install --dev
 
 before_script:
-  - python -V
   - psql -c "CREATE DATABASE $APP_DB_NAME;" -U postgres
   - pipenv run ./manage.py migrate --noinput
 
