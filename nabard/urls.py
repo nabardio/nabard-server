@@ -18,7 +18,10 @@ from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 
 
-v1_urls = ([path("user/", include("users.urls"))], "v1")
+v1_urls = (
+    [path("user/", include("users.urls")), path("game/", include("games.urls"))],
+    "v1",
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
