@@ -1,7 +1,9 @@
-import pytest
-from games.models import Game
-from django.core.files import File
 from io import BytesIO
+
+import pytest
+from django.core.files import File
+
+from games.models import Game
 
 
 @pytest.fixture(autouse=True)

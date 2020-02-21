@@ -34,4 +34,3 @@ class GameAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "owner")
     ordering = ("name",)
     search_fields = ("name", "description")
-

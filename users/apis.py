@@ -1,14 +1,12 @@
 from django.contrib.auth import login, logout
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed, NotFound, NotAuthenticated
-from rest_framework.generics import (
-    GenericAPIView,
-    RetrieveUpdateDestroyAPIView,
-)
+from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, NotFound
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 from nabard.permissions import IsOwnerOrReadOnly
+
 from .models import User
 from .serializers import UserSerializer
 

@@ -1,8 +1,9 @@
-from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
-from .serializers import GameSerializer
-from .models import Game
 from nabard.paginators import get_cursor_paginator
+
+from .models import Game
+from .serializers import GameSerializer
 
 
 class GameListAPIView(ListAPIView):
