@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "users.apps.UsersConfig",
+    "games.apps.GamesConfig",
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.CursorPagination",
     "PAGE_SIZE": 20,
 }
+
+# Media files
+
+AWS_ACCESS_KEY_ID = get_env("S3_ACCESS_KEY", "NABARD123456")
+AWS_SECRET_ACCESS_KEY = get_env("S3_SECRET_KEY", "NABARD123456")
+CODES_BUCKET_NAME = "codes"
+AWS_S3_SECURE_URLS = False
+AWS_S3_ENDPOINT_URL = get_env("S3_ENDPOINT", "http://localhost:9000")
