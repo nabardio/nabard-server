@@ -9,5 +9,5 @@ urlpatterns = [
         UserRetrieveUpdateDestroyAPIView.as_view(),
         name="retrieve-update-destroy",
     ),
-    path("", UserAPIView.as_view(), name="register"),
+    path("", UserAPIView.as_view(), name="profile-register"),
 ]
