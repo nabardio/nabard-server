@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "users.apps.UsersConfig",
     "games.apps.GamesConfig",
+    "robots.apps.RobotsConfig",
 ]
 
 MIDDLEWARE = [
