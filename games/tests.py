@@ -8,7 +8,7 @@ def test__list_games(logged_in_client, sample_game):
         assert item["name"] == sample_game["name"]
 
 
-def test__retrieve_activity(logged_in_client, sample_game):
+def test__retrieve_game(logged_in_client, sample_game):
     resp = logged_in_client.get(
         f"/api/v1/game/{sample_game['id']}/", content_type="application/json"
     )
