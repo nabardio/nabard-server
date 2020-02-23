@@ -18,7 +18,11 @@ from django.urls import include, path
 from rest_framework.documentation import include_docs_urls
 
 v1_urls = (
-    [path("user/", include("users.urls")), path("game/", include("games.urls"))],
+    [
+        path("user/", include(("users.urls", "user"), namespace="user")),
+        path("game/", include(("games.urls", "game"), namespace="game")),
+        path("robot/", include(("robots.urls", "robot"), namespace="robot")),
+    ],
     "v1",
 )
 
