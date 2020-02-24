@@ -29,3 +29,6 @@ class Game(Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="games", on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return f"{self.name}"

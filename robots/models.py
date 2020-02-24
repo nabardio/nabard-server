@@ -34,3 +34,6 @@ class Robot(Model):
         storage=CodeStorage(),
         validators=[FileExtensionValidator(["py"])],
     )
+
+    def __str__(self):
+        return f"{self.name}"
