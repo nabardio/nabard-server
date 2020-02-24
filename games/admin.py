@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from nabard.admin import Admin
+
 from .models import Game
 
 
 @admin.register(Game)
-class GameAdmin(admin.ModelAdmin):
+class GameAdmin(Admin):
     readonly_fields = ("id", "created_at", "updated_at")
     fieldsets = (
         (

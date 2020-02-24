@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from nabard.admin import Admin
+
 from .models import Robot
 
 
 @admin.register(Robot)
-class RobotAdmin(admin.ModelAdmin):
+class RobotAdmin(Admin):
     readonly_fields = ("id", "created_at", "updated_at")
     fieldsets = (
         (None, {"fields": (readonly_fields, "owner", "game", "name", "code")}),
