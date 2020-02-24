@@ -36,9 +36,10 @@ def test__register_new_user_with_simple_password(client):
 
 
 def test__login_user_with_username(client, sample_user):
+    user = sample_user()
     resp = client.post(
         "/api/v1/user/auth/",
-        data={"username": sample_user["username"], "password": sample_user["password"]},
+        data={"username": user["username"], "password": user["password"]},
         content_type="application/json",
     )
 
@@ -46,9 +47,10 @@ def test__login_user_with_username(client, sample_user):
 
 
 def test__login_user_with_email(client, sample_user):
+    user = sample_user()
     resp = client.post(
         "/api/v1/user/auth/",
-        data={"email": sample_user["email"], "password": sample_user["password"]},
+        data={"email": user["email"], "password": user["password"]},
         content_type="application/json",
     )
 
@@ -56,9 +58,10 @@ def test__login_user_with_email(client, sample_user):
 
 
 def test__login_user_with_wrong_username(client, sample_user):
+    user = sample_user()
     resp = client.post(
         "/api/v1/user/auth/",
-        data={"username": "wrong", "password": sample_user["password"]},
+        data={"username": "wrong", "password": user["password"]},
         content_type="application/json",
     )
 
@@ -66,9 +69,10 @@ def test__login_user_with_wrong_username(client, sample_user):
 
 
 def test__login_user_with_wrong_password(client, sample_user):
+    user = sample_user()
     resp = client.post(
         "/api/v1/user/auth/",
-        data={"username": sample_user["username"], "password": "wrong-password"},
+        data={"username": user["username"], "password": "wrong-password"},
         content_type="application/json",
     )
 
@@ -76,44 +80,48 @@ def test__login_user_with_wrong_password(client, sample_user):
 
 
 def test__logout_user(client, sample_user):
-    client.login(username=sample_user["username"], password=sample_user["password"])
+    user = sample_user()
+    client.login(username=user["username"], password=user["password"])
     resp = client.delete("/api/v1/user/auth/", content_type="application/json")
 
     assert resp.status_code == 204
 
 
 def test__retrieve_user(client, sample_user):
-    client.login(username=sample_user["username"], password=sample_user["password"])
+    user = sample_user()
+    client.login(username=user["username"], password=user["password"])
     resp = client.get(
-        f"/api/v1/user/{sample_user['username']}/", content_type="application/json"
+        f"/api/v1/user/{user['username']}/", content_type="application/json"
     )
 
     assert resp.status_code == 200
 
 
 def test__get_profile(client, sample_user):
-    client.login(username=sample_user["username"], password=sample_user["password"])
+    user = sample_user()
+    client.login(username=user["username"], password=user["password"])
     resp = client.get(f"/api/v1/user/", content_type="application/json")
 
     assert resp.status_code == 200
 
 
-def test__get_profile_unauthenticated(client, sample_user):
+def test__get_profile_unauthenticated(client):
     resp = client.get(f"/api/v1/user/", content_type="application/json")
 
     assert resp.status_code == 403
 
 
 def test__update_user(client, sample_user):
-    client.login(username=sample_user["username"], password=sample_user["password"])
+    user = sample_user()
+    client.login(username=user["username"], password=user["password"])
     resp = client.put(
-        f"/api/v1/user/{sample_user['username']}/",
+        f"/api/v1/user/{user['username']}/",
         data={
             "first_name": "changed",
             "last_name": "changed",
-            "username": sample_user["username"],
-            "email": sample_user["email"],
-            "password": sample_user["password"],
+            "username": user["username"],
+            "email": user["email"],
+            "password": user["password"],
         },
         content_type="application/json",
     )
@@ -125,9 +133,10 @@ def test__update_user(client, sample_user):
 
 
 def test__partial_update_user(client, sample_user):
-    client.login(username=sample_user["username"], password=sample_user["password"])
+    user = sample_user()
+    client.login(username=user["username"], password=user["password"])
     resp = client.patch(
-        f"/api/v1/user/{sample_user['username']}/",
+        f"/api/v1/user/{user['username']}/",
         data={"first_name": "changed", "last_name": "changed"},
         content_type="application/json",
     )

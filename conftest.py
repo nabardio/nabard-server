@@ -7,13 +7,6 @@ from games.models import Game
 from robots.models import Robot
 
 
-def generate_sample_file():
-    f = BytesIO("print('hello, world!')".encode())
-    f.name = "test.py"
-    f.seek(0)
-    return f
-
-
 @pytest.fixture(autouse=True)
 def enable_db_access_for_all_tests(db):
     pass
@@ -21,62 +14,71 @@ def enable_db_access_for_all_tests(db):
 
 @pytest.fixture
 def sample_user(django_user_model):
-    user_input = {
-        "first_name": "test",
-        "last_name": "test",
-        "username": "test",
-        "email": "test@test.tld",
-        "password": "P@ss4Test",
-    }
+    def _generate_sample_user(prefix=""):
+        try:
+            user = django_user_model.objects.get(username=f"{prefix}_test")
+            return user
+        except django_user_model.DoesNotExist:
+            pass
 
-    django_user_model.objects.create_user(**user_input)
-    return user_input
+        user_input = {
+            "first_name": f"{prefix}_test",
+            "last_name": f"{prefix}_test",
+            "username": f"{prefix}_test",
+            "email": f"{prefix}_test@test.tld",
+            "password": "P@ss4Test",
+        }
 
+        user = django_user_model.objects.create_user(**user_input)
+        user_input["id"] = str(user.pk)
+        return user_input
 
-@pytest.fixture
-def logged_in_client(sample_user, client):
-    client.login(username=sample_user["username"], password=sample_user["password"])
-    return client
+    return _generate_sample_user
 
 
 @pytest.fixture
 def sample_code():
-    return generate_sample_file()
+    def _generate_sample_code(filename="test.py"):
+        f = BytesIO("print('hello, world!')".encode())
+        f.name = filename
+        f.seek(0)
+        return f
+
+    return _generate_sample_code
 
 
 @pytest.fixture
-def sample_game(django_user_model, sample_user):
-    code = generate_sample_file()
+def sample_game(django_user_model, sample_user, sample_code):
+    def _generate_sample_game(owner_id, prefix=""):
+        code = sample_code()
+        game_input = {
+            "name": f"{prefix}_game",
+            "description": f"description for {prefix}_game",
+            "instruction": "long text describing how the game works and what to do?",
+            "code": File(code),
+            "owner": django_user_model.objects.get(pk=owner_id),
+        }
 
-    owner = django_user_model.objects.get(username=sample_user["username"])
-    game_input = {
-        "name": "test_game",
-        "description": "description for test_game",
-        "instruction": "long text describing how the game works and what to do?",
-        "code": File(code),
-        "owner": owner,
-    }
+        game = Game.objects.create(**game_input)
+        game_input["id"] = str(game.pk)
+        return game_input
 
-    game = Game.objects.create(**game_input)
-    game_input["id"] = str(game.pk)
-
-    return game_input
+    return _generate_sample_game
 
 
 @pytest.fixture
-def sample_robot(django_user_model, sample_user, sample_game):
-    code = generate_sample_file()
+def sample_robot(django_user_model, sample_user, sample_game, sample_code):
+    def _generate_sample_robot(game_id, owner_id, prefix=""):
+        code = sample_code()
+        robot_input = {
+            "name": f"{prefix}_robot",
+            "game": Game.objects.get(pk=game_id),
+            "code": File(code),
+            "owner": django_user_model.objects.get(pk=owner_id),
+        }
 
-    owner = django_user_model.objects.get(username=sample_user["username"])
-    game = Game.objects.get(pk=sample_game["id"])
-    robot_input = {
-        "name": "test_robot",
-        "game": game,
-        "code": File(code),
-        "owner": owner,
-    }
+        robot = Robot.objects.create(**robot_input)
+        robot_input["id"] = str(robot.pk)
+        return robot_input
 
-    robot = Robot.objects.create(**robot_input)
-    robot_input["id"] = str(robot.pk)
-
-    return robot_input
+    return _generate_sample_robot
