@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "games.apps.GamesConfig",
     "robots.apps.RobotsConfig",
+    "matches.apps.MatchesConfig",
 ]
 
 MIDDLEWARE = [
