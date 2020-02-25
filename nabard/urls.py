@@ -22,6 +22,7 @@ v1_urls = (
         path("user/", include(("users.urls", "user"), namespace="user")),
         path("game/", include(("games.urls", "game"), namespace="game")),
         path("robot/", include(("robots.urls", "robot"), namespace="robot")),
+        path("match/", include(("matches.urls", "match"), namespace="match")),
     ],
     "v1",
 )
