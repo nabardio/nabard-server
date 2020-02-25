@@ -9,6 +9,8 @@ from . import models
 class MatchAdmin(Admin):
     readonly_fields = (
         "id",
+        "game",
+        "finished_at",
         "created_at",
         "updated_at",
     )
@@ -19,8 +21,6 @@ class MatchAdmin(Admin):
                 "fields": (
                     readonly_fields,
                     "start_at",
-                    "finished_at",
-                    "game",
                     "home_robot",
                     "away_robot",
                     "home_score",
@@ -42,9 +42,4 @@ class MatchAdmin(Admin):
 
     list_display = ("home_robot", "away_robot", "game", "start_at", "finished_at")
     list_filter = ("home_robot", "away_robot", "game", "start_at", "finished_at")
-    ordering = ("finished_at",)
-
-    def get_fieldsets(self, request, obj=None):
-        if not obj:
-            return self.add_fieldsets
-        return super().get_fieldsets(request, obj)
+    ordering = ("finished_at", "start_at")
