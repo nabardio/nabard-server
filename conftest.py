@@ -5,6 +5,7 @@ from django.core.files import File
 
 from games.models import Game
 from robots.models import Robot
+from matches.models import Match
 
 
 @pytest.fixture(autouse=True)
@@ -15,12 +16,6 @@ def enable_db_access_for_all_tests(db):
 @pytest.fixture
 def sample_user(django_user_model):
     def _generate_sample_user(prefix=""):
-        try:
-            user = django_user_model.objects.get(username=f"{prefix}_test")
-            return user
-        except django_user_model.DoesNotExist:
-            pass
-
         user_input = {
             "first_name": f"{prefix}_test",
             "last_name": f"{prefix}_test",
@@ -29,7 +24,11 @@ def sample_user(django_user_model):
             "password": "P@ss4Test",
         }
 
-        user = django_user_model.objects.create_user(**user_input)
+        try:
+            user = django_user_model.objects.get(username=f"{prefix}_test")
+        except django_user_model.DoesNotExist:
+            user = django_user_model.objects.create_user(**user_input)
+
         user_input["id"] = str(user.pk)
         return user_input
 
@@ -82,3 +81,26 @@ def sample_robot(django_user_model, sample_user, sample_game, sample_code):
         return robot_input
 
     return _generate_sample_robot
+
+
+@pytest.fixture
+def sample_match(sample_user, sample_game, sample_robot):
+    def _generate_sample_match(start_at):
+        a_user = sample_user(prefix="a")
+        b_user = sample_user(prefix="b")
+        game = sample_game(owner_id=a_user["id"])
+        a_robot = sample_robot(owner_id=a_user["id"], game_id=game["id"], prefix="a")
+        b_robot = sample_robot(owner_id=b_user["id"], game_id=game["id"], prefix="b")
+
+        match_input = {
+            "home_robot": Robot.objects.get(pk=a_robot["id"]),
+            "away_robot": Robot.objects.get(pk=b_robot["id"]),
+            "start_at": start_at,
+            "game": Game.objects.get(pk=game["id"]),
+        }
+
+        match = Match.objects.create(**match_input)
+        match_input["id"] = str(match.pk)
+        return match_input
+
+    return _generate_sample_match
