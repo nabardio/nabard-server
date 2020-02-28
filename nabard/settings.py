@@ -151,3 +151,19 @@ CODES_BUCKET_NAME = "codes"
 AWS_S3_SECURE_URLS = False
 AWS_DEFAULT_ACL = None
 AWS_S3_ENDPOINT_URL = get_env("S3_ENDPOINT", "http://localhost:9000")
+
+# Docker
+
+DOCKER_BASE_URL = get_env("DOCKER_BASE_URL", "unix:///var/run/docker.sock")
+DOCKER_MATCH_RUNNER_IMAGE = get_env(
+    "DOCKER_MATCH_RUNNER_IMAGE", "nabardio/match-runner"
+)
+
+# Celery
+
+CELERY_BROKER_URL = get_env("CELERY_BROKER_URL", "amqp://")
+CELERY_RESULT_BACKEND = get_env("CELERY_RESULT_BACKEND", "rpc://")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE

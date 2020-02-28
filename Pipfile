@@ -17,6 +17,8 @@ psycopg2-binary = "*"
 coreapi = "*"
 django-storages = "*"
 boto3 = "*"
+celery = "*"
+docker = "*"
 
 [requires]
 python_version = "3.8"
