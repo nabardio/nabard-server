@@ -1,0 +1,4 @@
+# SHECAN
+shecan_required: yes
+shecan_primary_dns: 178.22.122.100
+shecan_secondary_dns: 185.51.200.2

@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: bahampa
+      POSTGRES_DB: bahampa
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    restart: always
+
+  s3:
+    image: minio/minio
+    command: server /data
+    env_file:
+      - .env
+    environment:
+      MINIO_BROWSER: "off"
+    volumes:
+      - ./s3:/data
+    restart: always
+
+  bahampa:
+    image: registry.gitlab.com/vianatech/bahampa/bahampa-django
+    env_file:
+      - .env
+    environment:
+      APP_DEBUG: "false"
+      APP_DB_HOST: db
+      APP_S3_ENDPOINT: http://s3:9000
+      APP_S3_CDN_ENDPOINT: cdn.bahampa.com
+    depends_on:
+      - db
+      - s3
+    restart: always
+
+  nginx:
+    image: registry.gitlab.com/vianatech/bahampa/bahampa-django/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - bahampa
+    volumes:
+      - ./static:/static
+    restart: always

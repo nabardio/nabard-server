@@ -1,0 +1,5 @@
+all:
+  children:
+    main:
+      hosts:
+        main-server: 10.10.10.10
