@@ -1,0 +1,23 @@
+- name: Setup private network
+
+- name: Setup postgres database
+  docker_container:
+    name: postgres-nabard
+    image: postgres:{{ postgres_version }}
+    state: started
+    env:
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_DB: "{{ postgres_db }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+    volumes:
+      - "{{ postgres_data_path }}:/var/lib/postgresql/data"
+
+- name: Setup minio
+  docker_container:
+    name: minio-nabard
+    image: minio/minio:{{ minio_version }}
+    command: server /data
+    env:
+      MINIO_BROWSER: "off"
+    volumes:
+      - "{{ minio_data_path }}:/data"

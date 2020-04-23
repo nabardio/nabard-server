@@ -1,13 +1,14 @@
 - name: Install dependency packages
   become: yes
   apt:
-    pkg:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg-agent
-      - software-properties-common
+    name: "{{ item }}"
     update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
 
 - name: Add Docker GPG apt Key
   become: yes
@@ -24,8 +25,15 @@
 - name: Update apt and install docker-ce
   become: yes
   apt:
-    pkg:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
+    name: "{{ item }}"
     update_cache: yes
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: Add "{{ ansible_user }}" to docker group
+  user:
+    name: "{{ ansible_user }}"
+    group: docker
+    append: yes

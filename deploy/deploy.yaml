@@ -1,5 +1,4 @@
 - hosts: main
   tasks:
     - import_role: docker
-    - name: Docker-compose UP
-      include_tasks: docker-compose-up.yaml
+    - import_role: nabard
