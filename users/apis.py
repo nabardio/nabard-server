@@ -6,6 +6,7 @@ from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 from nabard.permissions import IsOwnerOrReadOnly
+from nabard.exceptions import BadRequest
 
 from .models import User
 from .serializers import UserSerializer
@@ -44,8 +45,10 @@ class AuthAPIView(GenericAPIView):
     def find_user(self):
         if self.request.data.get("username"):
             user = User.objects.filter(username=self.request.data["username"]).first()
-        else:
+        elif self.request.data.get("email"):
             user = User.objects.filter(email=self.request.data["email"]).first()
+        else:
+            raise BadRequest(detail=_('"username" or "email" is required'))
         if not user:
             raise NotFound(detail=_("user not found"))
         return user

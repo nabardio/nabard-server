@@ -79,6 +79,16 @@ def test__login_user_with_wrong_password(client, sample_user):
     assert resp.status_code == 403
 
 
+def test__login_with_empty_request_body(client):
+    user_input = {}
+
+    resp = client.post(
+        "/api/v1/auth/", data=user_input, content_type="application/json"
+    )
+
+    assert resp.status_code == 400
+
+
 def test__logout_user(client, sample_user):
     user = sample_user()
     client.login(username=user["username"], password=user["password"])
