@@ -1,0 +1,14 @@
+- import_tasks: dns.yaml
+
+- name: Setup Minio
+  docker_container:
+    name: minio-nabard
+    image: minio/minio:{{ minio_version }}
+    command: server /data
+    restart_policy: always
+    env:
+      MINIO_BROWSER: "off"
+      MINIO_ACCESS_KEY: "{{ s3_access_key }}"
+      MINIO_SECRET_KEY: "{{ s3_secret_key }}"
+    volumes:
+      - "{{ deployment_path }}/minio/data:/data"

@@ -1,0 +1,53 @@
+upstream app {
+    server nabard-django:8000;
+}
+
+upstream s3 {
+    server s3:9000;
+}
+
+
+server {
+    listen 80;
+    server_name {{ s3_cdn_endpoint }};
+    charset     utf-8;
+
+    client_max_body_size 5M;
+
+        location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass  http://s3;
+    }
+}
+
+server {
+    listen 80;
+    server_name {{ web_endpoint }};
+    charset     utf-8;
+
+    client_max_body_size 5M;
+
+    location /api {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass  http://app;
+    }
+
+    location /admin {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass  http://app;
+    }
+
+    location / {
+        rewrite ^/$ /static/index.html break;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass  http://s3/static/;
+    }
+}

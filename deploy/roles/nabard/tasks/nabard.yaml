@@ -1,0 +1,36 @@
+- name: Setup Django app
+  docker_container:
+    name: nabard-django
+    image: nabardio/nabard-server:{{ nabard_version }}
+    command: django
+    restart_policy: always
+    env:
+      APP_DEBUG: "false"
+      APP_DB_HOST: db
+      APP_DB_PASS: "{{ postgres_pass }}"
+      APP_DOMAIN: "{{ web_endpoint }}"
+      APP_S3_ENDPOINT: http://s3:9000
+      APP_S3_CDN_ENDPOINT: "{{ s3_cdn_endpoint }}"
+      APP_CELERY_BROKER_URL: amqp://{{ rabbitmq_user }}:{{ rabbitmq_pass }}@rabbitmq:5672/{{ rabbitmq_vhost }}
+    links:
+      - db:postgres-nabard
+      - s3:minio-nabard
+      - rabbitmq:rabbitmq-nabard
+
+- name: Setup Celery app
+  docker_container:
+    name: nabard-celery
+    image: nabardio/nabard-server:{{ nabard_version }}
+    command: celery
+    restart_policy: always
+    env:
+      APP_DEBUG: "false"
+      APP_DB_HOST: db
+      APP_DB_PASS: "{{ postgres_pass }}"
+      APP_S3_ENDPOINT: http://s3:9000
+      APP_S3_CDN_ENDPOINT: "{{ s3_cdn_endpoint }}"
+      APP_CELERY_BROKER_URL: amqp://{{ rabbitmq_user }}:{{ rabbitmq_pass }}@rabbitmq:5672/{{ rabbitmq_vhost }}
+    links:
+      - db:postgres-nabard
+      - s3:minio-nabard
+      - rabbitmq:rabbitmq-nabard

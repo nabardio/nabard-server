@@ -1,58 +1,8 @@
-- name: Setup postgres database
-  docker_container:
-    name: postgres-nabard
-    image: postgres:{{ postgres_version }}
-    state: started
-    restart_policy: always
-    env:
-      POSTGRES_USER: "{{ postgres_user }}"
-      POSTGRES_DB: "{{ postgres_db }}"
-      POSTGRES_PASSWORD: "{{ postgres_password }}"
-    volumes:
-      - "{{ postgres_data_path }}:/var/lib/postgresql/data"
-
-- name: Setup minio
-  docker_container:
-    name: minio-nabard
-    image: minio/minio:{{ minio_version }}
-    command: server /data
-    restart_policy: always
-    env:
-      MINIO_BROWSER: "off"
-      MINIO_ACCESS_KEY: "{{ s3_access_key }}"
-      MINIO_SECRET_KEY: "{{ s3_secret_key }}"
-    volumes:
-      - "{{ minio_data_path }}:/data"
-
-- name: Setup RabbitMQ
-  docker_container:
-    name: rabbitmq-nabard
-    image: rabbitmq:{{ rabbitmq_version }}
-    command: server /data
-    restart_policy: always
-    env:
-      RABBITMQ_DEFAULT_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_DEFAULT_PASS: "{{ rabbitmq_pass }}"
-      RABBITMQ_DEFAULT_VHOST: "{{ rabbitmq_vhost }}"
-    volumes:
-      - "{{ minio_data_path }}:/data"
-
-- name: Setup web app
-  docker_container:
-    name: nabard-web
-    image: nabardio/nabard-server:{{ nabard_version }}
-    command: django
-    restart_policy: always
-    env:
-      APP_DEBUG: "false"
-      APP_DB_HOST: db
-      APP_S3_ENDPOINT: http://s3:9000
-      APP_S3_CDN_ENDPOINT: "{{ s3_cdn_endpoint }}"
-      APP_CELERY_BROKER_URL: amqp://{{ rabbitmq_user }}:{{ rabbitmq_pass }}@rabbitmq:5672/{{ rabbitmq_vhost }}
-    links:
-      - db:postgres-nabard
-      - s3:minio-nabard
-      - rabbitmq:rabbitmq-nabard
+- import_tasks: postgres.yaml
+- import_tasks: minio.yaml
+- import_tasks: rabbitmq.yaml
+- import_tasks: nabard.yaml
+- import_tasks: nginx.yaml
 
 - name: Setup private network
   docker_network:
@@ -61,6 +11,6 @@
       - postgres-nabard
       - minio-nabard
       - rabbitmq-nabard
-      - nabard-web
+      - nabard-django
       - nabard-celery
       - nginx-nabard
