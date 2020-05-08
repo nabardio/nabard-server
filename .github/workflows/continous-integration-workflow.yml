@@ -6,6 +6,9 @@ jobs:
   test:
     name: Test Execution
     runs-on: ubuntu-latest
+    container:
+      image: python:3
+
     services:
       postgres:
         image: postgres
@@ -37,11 +40,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up Python 3.8.x
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
 
       - name: Install pipenv
         run: pip install pipenv
