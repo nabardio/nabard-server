@@ -29,6 +29,10 @@ jobs:
           MINIO_ACCESS_KEY: NABARDACCESSKEY
           MINIO_SECRET_KEY: NabardSecretAcessKey
           MINIO_BUCKETS: codes
+
+      rabbitmq:
+        image: rabbitmq
+
     env:
       APP_DB_HOST: postgres
       APP_DB_USER: nabard
@@ -37,6 +41,7 @@ jobs:
       APP_S3_ENDPOINT: http://minio:9000
       APP_S3_ACCESS_KEY: NABARDACCESSKEY
       APP_S3_SECRET_KEY: NabardSecretAcessKey
+      APP_CELERY_BROKER_URL: amqp://rabbitmq
 
     steps:
       - uses: actions/checkout@v2
