@@ -83,7 +83,7 @@ def test__login_with_empty_request_body(client):
     user_input = {}
 
     resp = client.post(
-        "/api/v1/auth/", data=user_input, content_type="application/json"
+        "/api/v1/user/auth/", data=user_input, content_type="application/json"
     )
 
     assert resp.status_code == 400
