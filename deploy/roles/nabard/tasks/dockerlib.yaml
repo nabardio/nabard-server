@@ -1,0 +1,9 @@
+- name: Install pip3
+  become: yes
+  apt:
+    name: python3-pip
+
+- name: Install docker lib for ansible
+  become: yes
+  pip:
+    name: docker

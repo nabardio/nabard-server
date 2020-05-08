@@ -1,0 +1,6 @@
+all:
+  children:
+    main:
+      hosts:
+        nabard-main:
+          ansible_host: 185.97.118.61

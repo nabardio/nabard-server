@@ -1,0 +1,12 @@
+- import_tasks: dns.yaml
+
+- name: Setup RabbitMQ
+  become: yes
+  docker_container:
+    name: rabbitmq-nabard
+    image: rabbitmq:{{ rabbitmq_version }}
+    restart_policy: always
+    env:
+      RABBITMQ_DEFAULT_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_DEFAULT_PASS: "{{ rabbitmq_pass }}"
+      RABBITMQ_DEFAULT_VHOST: "{{ rabbitmq_vhost }}"

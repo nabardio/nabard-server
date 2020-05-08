@@ -1,0 +1,15 @@
+- import_tasks: dns.yaml
+
+- name: Setup Postgres database
+  become: yes
+  docker_container:
+    name: postgres-nabard
+    image: postgres:{{ postgres_version }}
+    state: started
+    restart_policy: always
+    env:
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_DB: "{{ postgres_db }}"
+      POSTGRES_PASSWORD: "{{ postgres_pass }}"
+    volumes:
+      - "{{ deployment_path }}/postgres/data:/var/lib/postgresql/data"

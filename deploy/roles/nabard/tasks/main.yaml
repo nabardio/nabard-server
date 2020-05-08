@@ -1,0 +1,17 @@
+- import_tasks: dockerlib.yaml
+- import_tasks: postgres.yaml
+- import_tasks: minio.yaml
+- import_tasks: rabbitmq.yaml
+- import_tasks: nabard.yaml
+- import_tasks: nginx.yaml
+
+- name: Setup private network
+  docker_network:
+    name: nabard
+    connected:
+      - postgres-nabard
+      - minio-nabard
+      - rabbitmq-nabard
+      - nabard-django
+      - nabard-celery
+      - nginx-nabard

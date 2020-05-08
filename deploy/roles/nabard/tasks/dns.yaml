@@ -1,0 +1,8 @@
+- name: Setup "Shecan" DNS in resolv.conf
+  become: yes
+  copy:
+    content: |
+      options edns0
+      nameserver {{ shecan_primary_dns }}
+      nameserver {{ shecan_secondary_dns }}
+    dest: /etc/resolv.conf
