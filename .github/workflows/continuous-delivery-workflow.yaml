@@ -6,6 +6,22 @@ on:
 
 jobs:
   build:
+    name: Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and push the docker image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: nabardio/nabard-server
+          tag_with_ref: true
+          tags: latest
+
+  deploy:
     name: Ansible Deployment
     runs-on: ubuntu-latest
     container:
@@ -26,7 +42,7 @@ jobs:
 
       - name: Run ansible deploy.yaml playbook
         run: |
-          pipenv run 
+          pipenv run \
               ansible-playbook \
               --vault-password-file vault-pass.txt \
               -i inventory.yaml \
