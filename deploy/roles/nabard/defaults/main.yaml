@@ -3,4 +3,4 @@ rabbitmq_version: latest
 minio_version: latest
 nabard_version: latest
 
-deployment_path: $HOME/deployment
+deployment_path: "{{ lookup('env', 'HOME') }}/deployment"

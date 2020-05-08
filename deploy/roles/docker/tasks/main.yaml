@@ -1,3 +1,4 @@
 - name: Install docker
+  become: yes
   snap:
     name: docker

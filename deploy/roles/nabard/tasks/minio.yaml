@@ -1,6 +1,7 @@
 - import_tasks: dns.yaml
 
 - name: Setup Minio
+  become: yes
   docker_container:
     name: minio-nabard
     image: minio/minio:{{ minio_version }}

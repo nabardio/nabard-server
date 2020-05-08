@@ -1,6 +1,7 @@
 - import_tasks: dns.yaml
 
 - name: Setup Postgres database
+  become: yes
   docker_container:
     name: postgres-nabard
     image: postgres:{{ postgres_version }}

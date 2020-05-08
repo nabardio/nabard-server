@@ -1,4 +1,4 @@
-name: Continous Integration
+name: Continuous Integration
 
 on: [push, pull_request]
 
@@ -7,7 +7,7 @@ jobs:
     name: Test Execution
     runs-on: ubuntu-latest
     container:
-      image: python:3
+      image: python
 
     services:
       postgres:

@@ -1,0 +1,35 @@
+name: Continuous Deployment
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Ansible Deployment
+    runs-on: ubuntu-latest
+    container:
+      image: python
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Create ansible vault password file
+        run: echo ${{ secrets.ANSIBLE_VAULT_PASS }} > vault-pass.txt
+        working-directory: deploy
+
+      - name: Run ansible deploy.yaml playbook
+        run: |
+          pipenv run 
+              ansible-playbook \
+              --vault-password-file vault-pass.txt \
+              -i inventory.yaml \
+              --extra-vars "nabard_version:${GITHUB_REF/refs\/tags\//}" \
+              deploy.yaml
+        working-directory: deploy

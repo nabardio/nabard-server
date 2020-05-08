@@ -1,4 +1,5 @@
 - name: Setup Django app
+  become: yes
   docker_container:
     name: nabard-django
     image: nabardio/nabard-server:{{ nabard_version }}
@@ -18,6 +19,7 @@
       - rabbitmq:rabbitmq-nabard
 
 - name: Setup Celery app
+  become: yes
   docker_container:
     name: nabard-celery
     image: nabardio/nabard-server:{{ nabard_version }}

@@ -1,6 +1,7 @@
 - import_tasks: dns.yaml
 
 - name: Setup RabbitMQ
+  become: yes
   docker_container:
     name: rabbitmq-nabard
     image: rabbitmq:{{ rabbitmq_version }}

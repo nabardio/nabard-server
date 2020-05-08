@@ -1,3 +1,4 @@
+- import_tasks: dockerlib.yaml
 - import_tasks: postgres.yaml
 - import_tasks: minio.yaml
 - import_tasks: rabbitmq.yaml
