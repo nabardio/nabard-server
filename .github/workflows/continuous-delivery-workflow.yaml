@@ -22,6 +22,7 @@ jobs:
           tags: latest
 
   deploy:
+    needs: [build]
     name: Ansible Deployment
     runs-on: ubuntu-latest
     container:
@@ -40,12 +41,17 @@ jobs:
         run: echo ${{ secrets.ANSIBLE_VAULT_PASS }} > vault-pass.txt
         working-directory: deploy
 
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Run ansible deploy.yaml playbook
-        run: |
-          pipenv run \
-              ansible-playbook \
-              --vault-password-file vault-pass.txt \
-              -i inventory.yaml \
-              --extra-vars "nabard_version:${GITHUB_REF/refs\/tags\//}" \
-              deploy.yaml
+        run: >-
+          pipenv run
+          ansible-playbook
+          --vault-password-file vault-pass.txt
+          --extra-vars "nabard_version:${GITHUB_REF/refs\/tags\//}"
+          -i inventory.yaml
+          deploy.yaml
         working-directory: deploy
