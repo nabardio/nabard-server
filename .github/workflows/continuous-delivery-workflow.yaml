@@ -46,12 +46,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Extract version
+        run: echo ::set-env name=VERSION::$(git describe --tags)
+
       - name: Run ansible deploy.yaml playbook
         run: >-
           pipenv run
           ansible-playbook
           --vault-password-file vault-pass.txt
-          --extra-vars "nabard_version:${GITHUB_REF/refs\/tags\//}"
+          --extra-vars nabard_version=$VERSION
           -i inventory.yaml
           deploy.yaml
         working-directory: deploy
