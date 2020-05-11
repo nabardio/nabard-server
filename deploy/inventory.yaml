@@ -3,4 +3,4 @@ all:
     main:
       hosts:
         nabard-main:
-          ansible_host: 185.206.92.112
+          ansible_host: 5.253.24.205
