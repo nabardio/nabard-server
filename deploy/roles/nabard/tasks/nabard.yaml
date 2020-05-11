@@ -14,9 +14,9 @@
       APP_S3_CDN_ENDPOINT: "{{ s3_cdn_endpoint }}"
       APP_CELERY_BROKER_URL: amqp://{{ rabbitmq_user }}:{{ rabbitmq_pass }}@rabbitmq:5672/{{ rabbitmq_vhost }}
     links:
-      - db:postgres-nabard
-      - s3:minio-nabard
-      - rabbitmq:rabbitmq-nabard
+      - postgres-nabard:db
+      - minio-nabard:s3
+      - rabbitmq-nabard:rabbitmq
 
 - name: Setup Celery app
   become: yes
@@ -33,6 +33,6 @@
       APP_S3_CDN_ENDPOINT: "{{ s3_cdn_endpoint }}"
       APP_CELERY_BROKER_URL: amqp://{{ rabbitmq_user }}:{{ rabbitmq_pass }}@rabbitmq:5672/{{ rabbitmq_vhost }}
     links:
-      - db:postgres-nabard
-      - s3:minio-nabard
-      - rabbitmq:rabbitmq-nabard
+      - postgres-nabard:db
+      - minio-nabard:s3
+      - rabbitmq-nabard:rabbitmq
