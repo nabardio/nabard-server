@@ -1,0 +1,5 @@
+- name: Ensure existance of hostname in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1 localhost {{ ansible_hostname }} {{ ansible_fqdn }}
