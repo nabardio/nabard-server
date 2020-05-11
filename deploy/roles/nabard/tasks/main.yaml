@@ -6,6 +6,7 @@
 - import_tasks: nginx.yaml
 
 - name: Setup private network
+  become: yes
   docker_network:
     name: nabard
     connected:
