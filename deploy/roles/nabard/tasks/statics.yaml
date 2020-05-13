@@ -1,0 +1,13 @@
+- name: Generate static files
+  delegate_to: localhost
+  command: pipenv run ../manage.py collectstatic --no-input
+  environment:
+    APP_DEBUG: "off"
+
+- name: Sync static files
+  become: yes
+  synchronize:
+    src: "{{ playbook_dir | dirname }}/static"
+    dest: "{{ deployment_path }}/minio/data/"
+    recursive: yes
+    delete: yes

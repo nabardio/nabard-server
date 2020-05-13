@@ -16,3 +16,5 @@
       - nabard-django
       - nabard-celery
       - nginx-nabard
+
+- import_tasks: statics.yaml
