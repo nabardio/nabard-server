@@ -110,13 +110,13 @@ def test__retrieve_user(client, sample_user):
 def test__get_profile(client, sample_user):
     user = sample_user()
     client.login(username=user["username"], password=user["password"])
-    resp = client.get(f"/api/v1/user/", content_type="application/json")
+    resp = client.get("/api/v1/user/", content_type="application/json")
 
     assert resp.status_code == 200
 
 
 def test__get_profile_unauthenticated(client):
-    resp = client.get(f"/api/v1/user/", content_type="application/json")
+    resp = client.get("/api/v1/user/", content_type="application/json")
 
     assert resp.status_code == 403
 

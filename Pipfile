@@ -11,6 +11,7 @@ pytest-cov = "*"
 pytest-django = "*"
 pylint = "*"
 ansible = "*"
+ansible-lint = "*"
 
 [packages]
 django = "*"

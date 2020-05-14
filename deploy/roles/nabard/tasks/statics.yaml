@@ -3,6 +3,7 @@
   command: pipenv run ../manage.py collectstatic --no-input
   environment:
     APP_DEBUG: "off"
+  when: true
 
 - name: Sync static files
   become: yes

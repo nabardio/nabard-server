@@ -3,6 +3,27 @@ name: Continuous Integration
 on: [push, pull_request]
 
 jobs:
+  lint:
+    name: Lint Checking
+    runs-on: ubuntu-latest
+    container:
+      image: python
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Ansible lint
+        run: pipenv run ansible-lint deploy/*.yaml
+
+      - name: Python lint
+        run: pipenv run pylama
+
   test:
     name: Test Execution
     runs-on: ubuntu-latest
