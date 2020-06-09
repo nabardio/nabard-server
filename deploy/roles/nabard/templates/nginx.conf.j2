@@ -44,10 +44,10 @@ server {
     }
 
     location / {
-        rewrite ^/$ /static/index.html break;
+        rewrite ^/$ /nabard-ui/index.html break;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
         proxy_redirect off;
-        proxy_pass  http://s3/static/;
+        proxy_pass  http://s3/nabard-ui/;
     }
 }
