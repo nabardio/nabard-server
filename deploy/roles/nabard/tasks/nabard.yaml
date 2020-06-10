@@ -17,6 +17,7 @@
       - postgres-nabard:db
       - minio-nabard:s3
       - rabbitmq-nabard:rabbitmq
+    restart: yes
 
 - name: Setup Celery app
   become: yes
@@ -36,3 +37,4 @@
       - postgres-nabard:db
       - minio-nabard:s3
       - rabbitmq-nabard:rabbitmq
+    restart: yes

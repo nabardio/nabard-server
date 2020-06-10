@@ -13,3 +13,4 @@
       MINIO_SECRET_KEY: "{{ s3_secret_key }}"
     volumes:
       - "{{ deployment_path }}/minio/data:/data"
+    restart: yes
