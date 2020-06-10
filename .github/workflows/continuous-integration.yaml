@@ -6,11 +6,18 @@ jobs:
   lint:
     name: Lint Checking
     runs-on: ubuntu-latest
-    container:
-      image: python
+
+    strategy:
+      matrix:
+        python-version: [3.8]
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: Install pipenv
         run: pip install pipenv
@@ -27,12 +34,16 @@ jobs:
   test:
     name: Test Execution
     runs-on: ubuntu-latest
-    container:
-      image: python
+
+    strategy:
+      matrix:
+        python-version: [3.8]
 
     services:
       postgres:
         image: postgres
+        ports:
+          - 5432:5432
         env:
           POSTGRES_DB: nabard_test
           POSTGRES_USER: nabard
@@ -46,6 +57,8 @@ jobs:
 
       minio:
         image: nabardio/minio
+        ports:
+          - 9000:9000
         env:
           MINIO_ACCESS_KEY: NABARDACCESSKEY
           MINIO_SECRET_KEY: NabardSecretAcessKey
@@ -53,19 +66,26 @@ jobs:
 
       rabbitmq:
         image: rabbitmq
+        ports:
+          - 5672:5672
 
     env:
-      APP_DB_HOST: postgres
+      APP_DB_HOST: localhost
       APP_DB_USER: nabard
       APP_DB_PASS: test_pass
       APP_DB_NAME: nabard_test
-      APP_S3_ENDPOINT: http://minio:9000
+      APP_S3_ENDPOINT: http://localhost:9000
       APP_S3_ACCESS_KEY: NABARDACCESSKEY
       APP_S3_SECRET_KEY: NabardSecretAcessKey
-      APP_CELERY_BROKER_URL: amqp://rabbitmq
+      APP_CELERY_BROKER_URL: amqp://localhost
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: Install pipenv
         run: pip install pipenv
