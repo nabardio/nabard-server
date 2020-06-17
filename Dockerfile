@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.8-slim
 LABEL MAINTAINER="mehdy.khoshnoody@gmail.com"
 
 ENV PYTHONBUFFERED 1
