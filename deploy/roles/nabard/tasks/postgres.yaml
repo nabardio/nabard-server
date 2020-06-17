@@ -13,4 +13,4 @@
       POSTGRES_PASSWORD: "{{ postgres_pass }}"
     volumes:
       - "{{ deployment_path }}/postgres/data:/var/lib/postgresql/data"
-    restart: yes
+    recreate: yes
