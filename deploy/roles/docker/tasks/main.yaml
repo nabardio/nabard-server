@@ -1,4 +1,24 @@
-- name: Install docker
+- name: Install required system packages
   become: yes
-  snap:
-    name: docker
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+
+- name: Add Docker GPG apt Key
+  become: yes
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  become: yes
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Update apt and install docker-ce
+  become: yes
+  apt:
+    name: docker-ce
+    update_cache: yes
