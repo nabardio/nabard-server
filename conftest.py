@@ -2,10 +2,13 @@ from io import BytesIO
 
 import pytest
 from django.core.files import File
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 from games.models import Game
 from robots.models import Robot
 from matches.models import Match
+from users.tokens import account_activation_token
 
 
 @pytest.fixture(autouse=True)
@@ -33,6 +36,41 @@ def sample_user(django_user_model):
         return user_input
 
     return _generate_sample_user
+
+
+@pytest.fixture
+def sample_no_login_user(django_user_model):
+    def _generate_sample_user(prefix=""):
+        user_input = {
+            "first_name": f"{prefix}_no_login_test",
+            "last_name": f"{prefix}_no_login_test",
+            "username": f"{prefix}_no_login_test",
+            "email": f"{prefix}_no_login_test@test.tld",
+            "password": "P@ss4Test",
+        }
+
+        try:
+            user = django_user_model.objects.get(username=f"{prefix}_test")
+        except django_user_model.DoesNotExist:
+            user = django_user_model.objects.create_user(**user_input)
+            user.is_active = False
+            user.save()
+
+        user_input["id"] = str(user.pk)
+        return user_input
+
+    return _generate_sample_user
+
+
+@pytest.fixture
+def generate_uid_and_token(django_user_model):
+    def _generate_uid_and_token(user_id):
+        user = django_user_model.objects.get(id=user_id)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = account_activation_token.make_token(user)
+        return uid, token
+
+    return _generate_uid_and_token
 
 
 @pytest.fixture
